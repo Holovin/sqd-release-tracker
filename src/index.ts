@@ -1,11 +1,10 @@
 import { config } from './config';
-import { TelegramBot } from './telegramBot';
+import { bot, TelegramBot } from './telegramBot';
 import { logger } from './logger';
 import { isDev } from './helpers';
 import { server } from './server';
 
 (async () => {
-    const bot = new TelegramBot(config.TG_BOT_TOKEN);
     await bot.initBot();
     bot.start()
         .then() // Never happen

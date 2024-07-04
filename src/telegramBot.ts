@@ -1,18 +1,7 @@
-import { Bot, Context, NextFunction, SessionFlavor } from 'grammy';
+import { Bot, Context, SessionFlavor } from 'grammy';
 import { ParseMode } from 'grammy/types';
 import { config } from './config.js';
 import { logger } from './logger.js';
-import { isDev } from './helpers.js';
-
-
-const TG_CMD = {
-    START: 'start',
-    START_LOCAL: 'start_localhost',
-}
-
-const resourceTokens = {
-    START: 'start',
-}
 
 const tgBaseOptions: { parse_mode: ParseMode, disable_web_page_preview: boolean } = {
     parse_mode: 'MarkdownV2',
@@ -20,7 +9,7 @@ const tgBaseOptions: { parse_mode: ParseMode, disable_web_page_preview: boolean 
 };
 
 
-export class TelegramBot {
+class TelegramBot {
     private bot: Bot<Context & SessionFlavor<{}>>;
 
     constructor(token: string) {
@@ -44,47 +33,17 @@ export class TelegramBot {
     }
 
     public async initBot() {
-        if (isDev()) {
-            this.bot.use(this.botLogger.bind(this));
-            this.bot.use(this.checkAccess.bind(this));
-            logger.info(`[bot] dev logger attached`);
-        }
-
-        this.bot.on('my_chat_member', async ctx => {
-            if (ctx.update.my_chat_member.new_chat_member.status === 'kicked') {
-                logger.info(`[bot] chat_member ${ctx.from.id} banned bot!`);
-                return;
-            }
-
-            if (ctx.update.my_chat_member.old_chat_member.status === 'kicked') {
-                logger.info(`[bot] chat_member ${ctx.from.id} unbanned bot!`);
-                return;
-            }
-        });
-
-        this.bot.command(TG_CMD.START, async ctx => {
-        });
-
         this.bot.catch((error) => {
             logger.error(`[bot] error: ${JSON.stringify(error)}`);
         });
-
     }
 
-    private async checkAccess(ctx: Context, next: NextFunction): Promise<void> {
-        if (ctx.update.message?.chat.type !== 'private') {
-            logger.debug(`[bot] skip message from non-chat ${JSON.stringify(ctx.update)}`);
-            return;
-        }
-
-        return next();
-    }
-
-    private async botLogger(ctx: Context, next: NextFunction): Promise<void> {
-        // LOG ANYTHING HERE //
-        logger.info(`[bot] ctx: ${JSON.stringify(ctx)}`);
-
-        return next();
+    public async send(header: string, text: string) {
+        await this.bot.api.sendMessage(
+            config.TG_BOT_CHAT,
+            `*${TelegramBot.escMd(header)}*\n\n${TelegramBot.escMd(text)}`,
+            tgBaseOptions
+        );
     }
 
     private static escMd(message: string): string {
@@ -110,3 +69,4 @@ export class TelegramBot {
     }
 }
 
+export const bot = new TelegramBot(config.TG_BOT_TOKEN);

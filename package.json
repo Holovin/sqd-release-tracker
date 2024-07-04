@@ -5,7 +5,8 @@
   "exports": "./src/index.ts",
   "type": "module",
   "scripts": {
-    "start": "tsx ./src/index.ts"
+    "start": "tsx ./src/index.ts",
+    "ci:push": "git push heroku HEAD:master -f"
   },
   "repository": {
     "type": "git",
