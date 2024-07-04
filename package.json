@@ -1,0 +1,29 @@
+{
+  "name": "sqd-release-tracker",
+  "version": "0.0.1",
+  "description": "Release tracker Telegram bot for Heroku & Vercel",
+  "exports": "./src/index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "tsx ./src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Holovin/sqd-release-tracker.git"
+  },
+  "author": "Alex Holovin",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.14.9",
+    "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "@fastify/cors": "^9.0.1",
+    "dotenv": "^16.4.5",
+    "fastify": "^4.28.1",
+    "grammy": "^1.26.1",
+    "pino": "^9.2.0",
+    "pino-pretty": "^11.2.1",
+    "tsx": "^4.16.2"
+  }
+}
