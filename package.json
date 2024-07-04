@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "tsx ./src/index.ts",
-    "ci:push": "git push heroku HEAD:master -f"
+    "ci:push": "git push heroku HEAD:master -f",
+    "hi:logs": "heroku logs --tail"
   },
   "repository": {
     "type": "git",
