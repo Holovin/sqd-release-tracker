@@ -23,14 +23,14 @@ server.register(fastifyCors, {
 });
 
 server.post('/heroku', async function handler(request, reply) {
-    const payload = request.body as any;
-    const appName = payload.data?.app?.name ?? '(app)'
-    const userName = payload.data?.user?.email ?? '(user)';
-    const status = payload.data?.status ?? '[status]';
-    const date = formatDate(payload.data?.created_at ?? '0');
-    const description = payload.data?.description ?? '-';
+    const data = request.body as any;
+    const appName = data.data?.app?.name ?? '(app)'
+    const userName = data.data?.user?.email ?? '(user)';
+    const status = data.data?.status ?? '[status]';
+    const date = formatDate(data.data?.created_at ?? '0');
+    const description = data.data?.description ?? '-';
 
-    await bot.send('Heroku', `${date}\n[${appName}] -- ${status} \nby ${userName}\nExtra: ${description}`);
+    await bot.send('Heroku', `${date}\n> ${appName}: ${status}\n\nExtra: ${description}`);
 
     return reply.status(200).send({ 'status': 'OK' });
 });
@@ -47,9 +47,9 @@ server.post('/vercel', async function handler(request, reply) {
         }
     }
 
-    const payload = request.body as any;
-    const date = formatDate(payload.createdAt ?? '0');
-    const type = payload.type;
+    const data = request.body as any;
+    const date = formatDate(data.createdAt ?? '0');
+    const type = data.type;
     let extra = '';
 
     if ([
@@ -60,12 +60,12 @@ server.post('/vercel', async function handler(request, reply) {
         'deployment.canceled',
         'deployment.error',
     ].includes(type)) {
-        extra += `Project: ${payload.deployment?.name} (${payload.deployment?.url ?? 'no url'})` +
-                 `\nTarget: ${payload.target ?? 'null'}`;
+        extra += `Project: ${data.payload.deployment?.name} (${data.payload.deployment?.url ?? 'no url'})` +
+                 `\nTarget: ${data.payload.target ?? 'empty'}`;
     }
 
 
-    await bot.send('Vercel', `${date}\n${type}\n${extra}`);
+    await bot.send('Vercel', `${date}\n>${type}\n\n${extra}`);
 
     return reply.status(200).send({ 'status': 'OK' });
 });
