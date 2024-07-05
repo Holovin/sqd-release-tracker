@@ -65,7 +65,7 @@ server.post('/vercel', async function handler(request, reply) {
     }
 
 
-    await bot.send('Vercel', `${date}\n>${type}\n\n${extra}`);
+    await bot.send('Vercel', `${date}\n> ${type}\n\n${extra}`);
 
     return reply.status(200).send({ 'status': 'OK' });
 });

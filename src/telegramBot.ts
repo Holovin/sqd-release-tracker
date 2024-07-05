@@ -39,9 +39,11 @@ class TelegramBot {
     }
 
     public async send(header: string, text: string) {
+        const wrapperMsg = TelegramBot.escMd(text).split('\n').map(line => `\`${line}\``).join('\n');
+
         await this.bot.api.sendMessage(
             config.TG_BOT_CHAT,
-            `*${TelegramBot.escMd(header)}*\n\n${TelegramBot.escMd(text)}`,
+            `*${TelegramBot.escMd(header)}*\n\n${wrapperMsg}`,
             tgBaseOptions
         );
     }
