@@ -32,7 +32,7 @@ server.post('/heroku', async function handler(request, reply) {
     const date = formatDate(data.data?.created_at ?? '0');
     const description = data.data?.description ?? '-';
 
-    await bot.send('Heroku', `${date}\n> ${appName}: ${status}\n\nExtra: ${description}`);
+    await bot.send('🏳️‍⚧️ Heroku', `${date}\n> ${appName}: ${status}\n\nExtra: ${description}`);
 
     return reply.status(200).send({ 'status': 'OK' });
 });
@@ -66,8 +66,7 @@ server.post('/vercel', async function handler(request, reply) {
                  `\nTarget: ${data.payload.target ?? 'empty'}`;
     }
 
-
-    await bot.send('Vercel', `${date}\n> ${type}\n\n${extra}`);
+    await bot.send('🏳️‍🌈 Vercel', `${date}\n> ${type}\n\n${extra}`);
 
     return reply.status(200).send({ 'status': 'OK' });
 });
@@ -90,7 +89,7 @@ server.post('/gitlab', async function handler(request, reply) {
         extra = `>>> ${mrUrl}`;
     }
 
-    await bot.send('Gitlab', `\n${userName}: ${event}\n\n${projectName} ${extra}`);
+    await bot.send('🪣 Gitlab', `🫄 ${userName}: ${event}\nProject:${projectName} ${extra}`);
 
     return reply.status(200).send({ 'status': 'OK' });
 });
