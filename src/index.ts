@@ -1,5 +1,5 @@
 import { config } from './config';
-import { bot, TelegramBot } from './telegramBot';
+import { bot } from './telegramBot';
 import { logger } from './logger';
 import { isDev } from './helpers';
 import { server } from './server';

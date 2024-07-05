@@ -23,6 +23,8 @@ server.register(fastifyCors, {
 });
 
 server.post('/heroku', async function handler(request, reply) {
+    // TODO: headers check
+
     const data = request.body as any;
     const appName = data.data?.app?.name ?? '(app)'
     const userName = data.data?.user?.email ?? '(user)';
@@ -70,6 +72,28 @@ server.post('/vercel', async function handler(request, reply) {
     return reply.status(200).send({ 'status': 'OK' });
 });
 
+server.post('/gitlab', async function handler(request, reply) {
+    // TODO: headers check
+    const data = request.body as any;
+    const userName = data.user_name ?? '';
+    const event = data.event_name ?? '';
+    const projectName = data.project.name || data.repository?.name || '';
+    let extra = '';
+
+    if (event === 'push') {
+        const branch = data.ref ?? '';
+        extra = `>>> ${branch}`;
+    }
+
+    if (event === 'merge_request') {
+        const mrUrl = data.object_attributes?.url ?? '';
+        extra = `>>> ${mrUrl}`;
+    }
+
+    await bot.send('Gitlab', `\n${userName}: ${event}\n\n${projectName} ${extra}`);
+
+    return reply.status(200).send({ 'status': 'OK' });
+});
 
 server.setNotFoundHandler(async function notFound(request, reply) {
     return reply
